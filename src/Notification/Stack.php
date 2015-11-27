@@ -3,27 +3,42 @@
 namespace ObjectivePHP\Notification;
 
 
+use ObjectivePHP\Matcher\Matcher;
 use ObjectivePHP\Primitives\Collection\Collection;
 
 class Stack extends Collection
 {
 
+    /**
+     * @var Matcher
+     */
+    protected $matcher;
+
+    /**
+     * Stack constructor.
+     *
+     * @param array $messages
+     */
     public function __construct($messages = [])
     {
         parent::__construct($messages);
+
         $this->restrictTo(MessageInterface::class);
 
     }
 
     /**
-     * @param string            $key
-     * @param MessageInterface  $message
+     * @param string           $key
+     * @param MessageInterface $message
      *
+     * @return $this
      * @throws \ObjectivePHP\Primitives\Exception
      */
-    public function addMessage($key, $message)
+    public function addMessage($key, MessageInterface $message)
     {
         $this->set($key, $message);
+
+        return $this;
     }
 
     /**
@@ -41,7 +56,7 @@ class Stack extends Collection
         else
         {
             $count = 0;
-            $this->message->each(
+            $this->each(
                 function (MessageInterface $message) use (&$count, $type)
                 {
                     if($type == $message->getType()) $count ++;
@@ -50,6 +65,42 @@ class Stack extends Collection
         }
 
         return $count;
+    }
+
+    /**
+     * @param $filter
+     */
+    public function for($filter)
+    {
+        return (clone $this)->filter(function($value, $key) use($filter) {
+            return $this->getMatcher()->match($filter, $key);
+        });
+    }
+
+    /**
+     * @return Matcher
+     */
+    public function getMatcher()
+    {
+
+        if(is_null($this->matcher))
+        {
+            $this->matcher = new Matcher();
+        }
+
+        return $this->matcher;
+    }
+
+    /**
+     * @param Matcher $matcher
+     *
+     * @return $this
+     */
+    public function setMatcher(Matcher $matcher)
+    {
+        $this->matcher = $matcher;
+
+        return $this;
     }
 
 }
