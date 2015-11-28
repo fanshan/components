@@ -43,6 +43,16 @@
         {
             $this->initValidators();
             $this->hydrate($data);
+
+            $this->init();
+        }
+
+        /**
+         * Delegated constructor
+         */
+        public function init()
+        {
+
         }
 
         /**

@@ -36,6 +36,7 @@
         {
 
             $notifications = new Notification\Stack();
+
             foreach($messages as $message)
             {
                 $notifications->addMessage($message, new Notification\Info(uniqid()));
