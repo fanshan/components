@@ -170,7 +170,7 @@
             $isValid = true;
             $notifications = new Notification\Stack();
 
-            $this->getValidators()->each(function ($validator) use (&$isValid, $notifications)
+            $this->getValidators()->each(function (callable $validator) use (&$isValid, $notifications)
             {
                 if (!$result = $validator($this, $notifications)) $isValid = false;
             })
@@ -197,6 +197,16 @@
         public function setValidators($validators)
         {
             $this->validators = Collection::cast($validators);
+
+            return $this;
+        }
+
+        /**
+         * @param $validator
+         */
+        public function addValidator($validator)
+        {
+            $this->validators->append($validator);
 
             return $this;
         }
