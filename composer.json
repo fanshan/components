@@ -30,7 +30,7 @@
       "objective-php/config": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.*"
+    "phpunit/phpunit": "5.*"
   },
   "autoload": {
     "psr-4": {

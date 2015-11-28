@@ -27,4 +27,5 @@
             <directory>../src</directory>
         </whitelist>
     </filter>
+
 </phpunit>
