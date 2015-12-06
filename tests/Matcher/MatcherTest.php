@@ -99,6 +99,7 @@ class MatcherTest extends TestCase
             ['!service', 'not-service'],
             ['service', '!not-service'],
             ['service', '![x|y]'],
+            ['.', '.'],
 
         ];
     }
