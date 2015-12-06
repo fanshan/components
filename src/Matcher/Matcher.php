@@ -36,6 +36,25 @@
                 $reference = implode($separator, $reference);
             }
 
+            // handle inversed patterns
+            $inversedFilter    = substr($filter, 0, 1) == '!';
+            $inversedReference = substr($reference, 0, 1) == '!';
+
+            if ($inversedFilter)
+            {
+                $filter = substr($filter, 1);
+            }
+
+            if ($inversedReference)
+            {
+                $reference = substr($reference, 1);
+            }
+
+            if ($inversedFilter XOR $inversedReference)
+            {
+                return !$this->match($filter, $reference);
+            }
+
             // check if either filter or reference contains alternatives
 
             // match if string are equals
@@ -243,15 +262,20 @@
          *
          * @param string $separator
          */
-        public function separator($separator = null)
+        public function setSeparator(string $separator) : self
         {
-            if (!is_null($separator))
-            {
-                $this->separator = $separator;
+            $this->separator = $separator;
 
-                return $this;
-            }
+            return $this;
+        }
 
+        /**
+         * Returns nest separator
+         *
+         * @param string $separator
+         */
+        public function getSeparator()
+        {
             return $this->separator;
         }
 
