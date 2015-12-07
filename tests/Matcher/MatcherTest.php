@@ -68,6 +68,7 @@ class MatcherTest extends TestCase
             ['multiple.reference', ['multiple', 'reference']],
             ['*', 'reference'],
             ['reference', '*'],
+            ['.reference', 'reference'],
             ['*.event', 'event.test.*'],
             ['*.event', 'name.space.event'],
             ['*.event', '*.event'],

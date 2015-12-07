@@ -5,13 +5,13 @@
     use ObjectivePHP\Primitives\String\Str;
     use ObjectivePHP\Notification;
 
+    /**
+     * Class AbstractDataProcessor
+     *
+     * @package ObjectivePHP\DataProcessor
+     */
     abstract class AbstractDataProcessor implements DataProcessorInterface
     {
-
-        /**
-         * @var Notification\Stack
-         */
-        protected $notifications;
 
         /**
          * Error message templates

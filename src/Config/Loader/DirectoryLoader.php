@@ -4,15 +4,16 @@
 
     use ObjectivePHP\Config\Config;
     use ObjectivePHP\Config\Exception;
+    use ObjectivePHP\Primitives\Collection\Collection;
 
     class DirectoryLoader implements LoaderInterface
     {
         /**
          * @param $location
          *
-         * @return mixed
+         * @return Config
          */
-        public function load($location)
+        public function load($location) : Config
         {
             $config = new Config();
 
@@ -46,9 +47,9 @@
          * @param $file
          * @param $config Config Make $config available in imported config file to manipulate it directly
          *
-         * @return mixed
+         * @return Config
          */
-        protected function import($file, $config)
+        protected function import($file, $config) : Config
         {
             $originalConfig = spl_object_hash($config);
 
@@ -60,7 +61,7 @@
                 throw new Exception(sprintf('$config has been overwritten while importing "%s" ; please do not assign a value to $config in your config files', $file));
             }
 
-            if($importedConfig && !$importedConfig instanceof Config)
+            if(!$importedConfig instanceof Config)
             {
                 $importedConfig = Config::factory($importedConfig);
             }

@@ -36,6 +36,7 @@
                 $reference = implode($separator, $reference);
             }
 
+
             // handle inversed patterns
             $inversedFilter    = substr($filter, 0, 1) == '!';
             $inversedReference = substr($reference, 0, 1) == '!';
@@ -50,10 +51,18 @@
                 $reference = substr($reference, 1);
             }
 
+
+
             if ($inversedFilter XOR $inversedReference)
             {
                 return !$this->match($filter, $reference);
             }
+
+
+            // remove separators from both ends
+            $filter    = trim($filter, $separator);
+            $reference = trim($reference, $separator);
+
 
             // check if either filter or reference contains alternatives
 
@@ -68,6 +77,7 @@
             {
                 return true;
             }
+
 
             // split identifiers parts
             $filterParts    = explode($separator, $filter);
