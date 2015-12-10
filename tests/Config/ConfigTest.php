@@ -15,12 +15,12 @@
         public function testDeepAccess()
         {
 
-            $config =  new Config([
-                            'app.version'   => 1.0,
-                            'app.env'       => 'test',
-                            'db.config.host' => 'localhost',
-                            'db.config.user' => 'plop',
-                            'db.driver' => 'pgsql'
+            $config = new Config([
+                'app.version'    => 1.0,
+                'app.env'        => 'test',
+                'db.config.host' => 'localhost',
+                'db.config.user' => 'plop',
+                'db.driver'      => 'pgsql'
             ]);
 
             $appConfig = $config->app;
@@ -43,8 +43,8 @@
         public function testFQNAdditions()
         {
             $config = new Config([
-                'app.version'    => 1.0,
-                'app.env'        => 'test',
+                'app.version' => 1.0,
+                'app.env'     => 'test',
             ]);
 
             $config->app->set('debug', true);
@@ -83,7 +83,8 @@
             $otherConfig = (new Config())->debug->fromArray([
                 'environments' => 'dev',
             ])
-                ->addMerger('environments', new ValueMerger(MergePolicy::NATIVE));
+                                                ->addMerger('environments', new ValueMerger(MergePolicy::NATIVE))
+            ;
 
             $config->merge($otherConfig);
             //$this->assertEquals(['test', 'dev'], $config->debug->environments->toArray());
@@ -94,18 +95,21 @@
         public function testFactory()
         {
             $config = Config::factory([
-                'section' => 'app',
-                'mergers' => ['tokens' => MergePolicy::NATIVE],
+                'section'    => 'app',
+                'mergers'    => ['tokens' => MergePolicy::NATIVE],
                 'validators' => [
-                    function($value) { return true; }
+                    function ($value)
+                    {
+                        return true;
+                    }
                 ],
                 'directives' =>
-                [
-                    'app.version' => '1.1',
-                    'environment' => 'dev',
-                    'tokens' => 'first',
-                    'other.subsection' => 'test'
-                ]
+                    [
+                        'app.version'      => '1.1',
+                        'environment'      => 'dev',
+                        'tokens'           => 'first',
+                        'other.subsection' => 'test'
+                    ]
             ]);
 
             $this->assertEquals('1.1', $config->app->version);
@@ -122,20 +126,28 @@
         public function testFactoryWithoutSection()
         {
             $config = Config::factory([
-                'app.version'   => '1.1',
-                'environment'   => 'dev',
-                'tokens'        => 'first',
+                'app.version'     => '1.1',
+                'environment'     => 'dev',
+                'tokens'          => 'first',
                 'other.directive' => 'test'
             ]);
 
             $this->assertEquals('test', $config->other->directive);
         }
 
+        public function testFactoryWithStructuredArray()
+        {
+            $config = new Config;
+            $config->app->add(['version' => '1.1']);
+
+            $this->assertEquals("1.1", $config->app->version);
+        }
+
         public function testConfigForbidsToSetDirectivesMatchingSectionName()
         {
             $config = new Config(['app.version' => '1.0']);
 
-            $this->expectsException(function() use ($config)
+            $this->expectsException(function () use ($config)
             {
                 $config->set('app', 'this is forbidden because app.version already exists!');
             }, Exception::class, null, Exception::FORBIDDEN_DIRECTIVE_NAME);
@@ -145,7 +157,7 @@
         {
             $config = new Config(['app.name' => 'my app']);
 
-            $this->expectsException(function() use ($config)
+            $this->expectsException(function () use ($config)
             {
                 $config->set('app.name.version', 'this is forbidden because app already exists!');
             }, Exception::class, null, Exception::FORBIDDEN_SECTION_NAME);
@@ -189,9 +201,9 @@
         {
             $config = new Config;
 
-            $config->z = 'test_z';
+            $config->z       = 'test_z';
             $config->a->b->c = 'test_a_b_c';
-            $config->x->y = 'test_x_y';
+            $config->x->y    = 'test_x_y';
             $config->a->d->c = 'test_a_d_c';
             $config->a->d->e = 'test_a_d_e';
 
@@ -222,7 +234,7 @@
             $c = $config->a->b->c;
 
             $this->assertNull($config->getSection());
-            $this->assertEquals('b.c',$config->b->c->getSection());
+            $this->assertEquals('b.c', $config->b->c->getSection());
 
         }
 
@@ -259,10 +271,10 @@
         public function testToArray()
         {
             $config = new Config([
-               'a.b.c' => 'x',
-               'a.b.d' => 'y',
-               'a.c.e' => 'z',
-               'b' => 'other'
+                'a.b.c' => 'x',
+                'a.b.d' => 'y',
+                'a.c.e' => 'z',
+                'b'     => 'other'
             ]);
 
 
@@ -289,4 +301,6 @@
                 ]
             ], $config->a->toArray());
         }
+
+
     }
