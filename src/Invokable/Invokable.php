@@ -48,6 +48,20 @@
         public function run(ApplicationInterface $app)
         {
 
+            $callable = $this->getCallable($app);
+
+            return $callable($app);
+        }
+
+        /**
+         * @param ApplicationInterface $app
+         * @return callable
+         *
+         * @throws Exception
+         * @throws \ObjectivePHP\ServicesFactory\Exception\ServiceNotFoundException
+         */
+        public function getCallable(ApplicationInterface $app)
+        {
             $operation = $this->operation;
 
             if (!is_callable($operation))
@@ -68,7 +82,7 @@
                 throw new Exception(sprintf('Cannot run operation: %s', $this->getDescription()));
             }
 
-            return $operation($app);
+            return $operation;
         }
 
         /**
