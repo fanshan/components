@@ -287,6 +287,23 @@
             $this->assertEquals($config['section']['directive'], 'value');
         }
 
+        public function testIteration()
+        {
+            $config = new Config([
+                'app.version' => 1.0,
+                'app.env'     => 'test',
+               ]);
+
+            $iterated = [];
+
+            foreach($config->app as $key => $value)
+            {
+                $iterated[$key] = $value;
+            }
+
+            $this->assertEquals($config->app->toArray(), $iterated);
+        }
+
 
         public function testToArray()
         {

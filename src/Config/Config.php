@@ -31,6 +31,11 @@
          */
         protected $parent;
 
+        /**
+         * @var array
+         */
+        protected $iterable;
+
         public function __construct(array $input = [])
         {
             $this->fromArray($input);
@@ -142,8 +147,6 @@
             $config = clone $this;
 
             // shunt setSection to prevent keys from being prefixed with current section
-            //$config->section = $section;
-            //$config->keyNormalizers = new Collection([$this->generateNormalizer($section)]);
             $config->setSection($section);
             $config->setParent($this->getParent() ?: $this);
 
@@ -633,4 +636,33 @@
                 }
             };
         }
+
+        public function rewind()
+        {
+            $this->iterable = $this->toArray();
+            return reset($this->iterable);
+        }
+
+        public function next()
+        {
+            return next($this->iterable);
+        }
+
+        public function valid()
+        {
+            return !is_null(key($this->iterable));
+        }
+
+        public function key()
+        {
+            return key($this->iterable);
+        }
+
+
+        public function current()
+        {
+            return current($this->iterable);
+        }
+
+
     }

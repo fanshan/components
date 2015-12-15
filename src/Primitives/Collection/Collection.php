@@ -10,6 +10,7 @@
     use ObjectivePHP\Primitives\Exception;
     use ObjectivePHP\Primitives\Merger\MergerInterface;
     use ObjectivePHP\Primitives\String\Str;
+    use Traversable;
 
     /**
      * Class Collection
@@ -1097,7 +1098,7 @@
          */
         public function valid()
         {
-            return current($this->value) !== false;
+            return !is_null(key($this->value));
         }
 
         /**
