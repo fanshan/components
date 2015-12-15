@@ -15,6 +15,7 @@
          * Run the operation
          *
          * @param ApplicationInterface $app
+         * @param mixed ...$args
          *
          * @return mixed
          */
