@@ -31,6 +31,12 @@
          */
         protected $parent;
 
+        public function __construct(array $input = [])
+        {
+            $this->fromArray($input);
+        }
+
+
         /**
          * @param array $configData
          */
@@ -53,10 +59,7 @@
 
             if ($section) $config = $config->__get($section);
 
-            foreach ($configData ?? [] as $key => $value)
-            {
-                $config->set($key, $value);
-            }
+            $config->fromArray($configData ?? []);
 
             if ($mergers)
             {
@@ -260,10 +263,16 @@
          */
         public function fromArray($directives)
         {
-            $directives = Config::cast($directives);
+            // $directives = Config::cast($directives);
+            // reset internal value
+            $this->value = [];
 
             foreach ($directives as $key => $value)
             {
+                if (is_array($value))
+                {
+                    $value = new Config($value);
+                }
                 $this->set($key, $value);
             }
 
@@ -417,7 +426,6 @@
 
             if ($value instanceof Config)
             {
-
                 $this->__get($directive)->fromArray($value);
             }
             else parent::set($directive, $value);

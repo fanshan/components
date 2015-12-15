@@ -173,7 +173,7 @@
             $this->assertInstanceOf(Config::class, $config->c);
             $this->assertEquals('c', $config->c->getSection());
 
-            $this->assertEquals(['y'], $config->c->d);
+            $this->assertEquals(['y'], $config->c->d->toArray());
         }
 
         public function testMatcherAccessors()
@@ -241,11 +241,11 @@
         public function testHasDirective()
         {
             $config = new Config([
-                'a.b.c' => ['d', 'e']
+                'a.b.c' => ['d', 'e', 'f' =>['g', 'h']]
             ]);
 
             $this->assertFalse($config->hasDirective('a'));
-            $this->assertTrue($config->hasDirective('a.b.c'));
+            $this->assertTrue($config->hasDirective('a.b.c.0'));
         }
 
 
@@ -267,6 +267,26 @@
 
             $this->assertEquals(['a.b' => 'c'], $config->getDirectives());
         }
+
+        public function testSettingSectionsFromArray()
+        {
+            $config = new Config(['section' => [
+                'directive' => 'value'
+            ]]);
+
+
+            $this->assertEquals($config->section->directive, 'value');
+        }
+
+        public function testArrayAccess()
+        {
+            $config = new Config(['section' => [
+                'directive' => 'value'
+            ]]);
+
+            $this->assertEquals($config['section']['directive'], 'value');
+        }
+
 
         public function testToArray()
         {
