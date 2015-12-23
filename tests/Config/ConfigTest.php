@@ -238,6 +238,17 @@
 
         }
 
+        public function testHasSection()
+        {
+            $config = new Config([
+                'a.b.c' => ['d', 'e', 'f' => ['g', 'h']]
+            ]);
+
+            $this->assertFalse($config->hasSection('a.b.c.f'));
+            $this->assertTrue($config->hasSection('a.b'));
+            $this->assertTrue($config->hasSection('a'));
+        }
+
         public function testHasDirective()
         {
             $config = new Config([
@@ -275,7 +286,27 @@
                                   'directive' => 'value'
                                 ])
             ]);
+
+
+            $this->assertTrue($config->hasSection('section'));
+            $this->assertTrue($config->hasDirective('section.directive'));
             $this->assertEquals('value', $config->section->directive);
+        }
+
+        public function testSettingSubSectionsFromArray()
+        {
+            $config = new Config();
+
+            $config->section->subsection->fromArray(
+                [
+                                  'directive' => 'value'
+                ]
+            );
+
+
+            $this->assertTrue($config->hasSection('section.subsection'));
+            $this->assertTrue($config->hasDirective('section.subsection.directive'));
+            $this->assertEquals('value', $config->section->subsection->directive);
         }
 
         public function testArrayAccess()
