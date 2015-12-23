@@ -42,9 +42,10 @@
         public function __construct($data = [])
         {
             $this->initValidators();
-            $this->hydrate($data);
 
             $this->init();
+
+            $this->hydrate($data);
         }
 
         /**

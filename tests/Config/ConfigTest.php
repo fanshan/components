@@ -173,7 +173,7 @@
             $this->assertInstanceOf(Config::class, $config->c);
             $this->assertEquals('c', $config->c->getSection());
 
-            $this->assertEquals(['y'], $config->c->d->toArray());
+            $this->assertEquals(['y'], $config->c->d);
         }
 
         public function testMatcherAccessors()
@@ -241,11 +241,11 @@
         public function testHasDirective()
         {
             $config = new Config([
-                'a.b.c' => ['d', 'e', 'f' =>['g', 'h']]
+                'a.b.c' => ['d', 'e', 'f' => ['g', 'h']]
             ]);
 
             $this->assertFalse($config->hasDirective('a'));
-            $this->assertTrue($config->hasDirective('a.b.c.0'));
+            $this->assertTrue($config->hasDirective('a.b.c'));
         }
 
 
@@ -270,12 +270,12 @@
 
         public function testSettingSectionsFromArray()
         {
-            $config = new Config(['section' => [
-                'directive' => 'value'
-            ]]);
-
-
-            $this->assertEquals($config->section->directive, 'value');
+            $config = new Config([
+                'section' => new Config([
+                                  'directive' => 'value'
+                                ])
+            ]);
+            $this->assertEquals('value', $config->section->directive);
         }
 
         public function testArrayAccess()
@@ -284,7 +284,7 @@
                 'directive' => 'value'
             ]]);
 
-            $this->assertEquals($config['section']['directive'], 'value');
+            $this->assertEquals('value', $config['section']['directive']);
         }
 
         public function testIteration()
@@ -292,11 +292,11 @@
             $config = new Config([
                 'app.version' => 1.0,
                 'app.env'     => 'test',
-               ]);
+            ]);
 
             $iterated = [];
 
-            foreach($config->app as $key => $value)
+            foreach ($config->app as $key => $value)
             {
                 $iterated[$key] = $value;
             }
@@ -304,6 +304,21 @@
             $this->assertEquals($config->app->toArray(), $iterated);
         }
 
+        public function testArrayMerging()
+        {
+            $config = (new Config(['x' => ['y']]));
+            $config->merge(['x' => 'z']);
+
+            $this->assertEquals(['x' => ['y', 'z']], $config->toArray());
+        }
+
+        public function testOtherArrayMerging()
+        {
+            $config = (new Config(['x' => 'y']));
+            $config->merge(['x' => ['z']]);
+
+            $this->assertEquals(['x' => ['y', 'z']], $config->toArray());
+        }
 
         public function testToArray()
         {

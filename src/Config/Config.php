@@ -160,7 +160,7 @@
          */
         public function computeCurrentSection($section)
         {
-            ;
+
             if ($currentSection = $this->getSection())
             {
                 $section = $currentSection . '.' . $section;
@@ -266,17 +266,18 @@
          */
         public function fromArray($directives)
         {
-            // $directives = Config::cast($directives);
             // reset internal value
-            $this->value = [];
+            if(!$this->getSection()) $this->value = [];
 
             foreach ($directives as $key => $value)
             {
-                if (is_array($value))
+                if ($value instanceof Config)
                 {
-                    $value = new Config($value);
+                    $subDirectives= $value->toArray();
+                    $subSection = (new Config())->setSection($key)->fromArray($subDirectives)->setSection(null);
+                    $this->merge($subSection);
                 }
-                $this->set($key, $value);
+                else $this->set($key, $value);
             }
 
             return $this;
@@ -304,14 +305,7 @@
 
             $target = $this->getParent() ?: $this;
 
-            if (isset($target->value[$key]))
-            {
-                return $target->value[$key];
-            }
-            else
-            {
-                return $default;
-            }
+            return $target->value[$key] ?? $default;
 
         }
 

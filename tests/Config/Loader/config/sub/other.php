@@ -7,9 +7,9 @@
         'packages.loaded' => 'sub'
     ]);
 
-    $extra = (new Config())->setSection('package.pre');
+    $extra = (new Config());
 
-    $extra->fromArray([
+    $extra->package->pre->fromArray([
         'version' => '0.1b'
 
     ]);
