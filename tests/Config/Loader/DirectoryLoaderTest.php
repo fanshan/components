@@ -1,13 +1,14 @@
 <?php
 
-    namespace Tests\ObjectivePHP\Config\Loader;
+    namespace Test\ObjectivePHP\Config\Loader;
 
 
-    use ObjectivePHP\Config\Config;
     use ObjectivePHP\Config\Exception;
     use ObjectivePHP\Config\Loader\DirectoryLoader;
+    use ObjectivePHP\Config\MultipleDirective;
+    use ObjectivePHP\Config\ScalarDirective;
+    use ObjectivePHP\Config\StackDirective;
     use ObjectivePHP\PHPUnit\TestCase;
-    use ObjectivePHP\Primitives\Collection\Collection;
 
     class DirectoryLoaderTest extends TestCase
     {
@@ -27,25 +28,36 @@
             $configLoader = new DirectoryLoader();
 
             $config = $configLoader->load(__DIR__ . '/config');
-            $this->assertEquals($this->getExpectedConfig()->toArray(), $config->toArray());
+            $this->assertEquals($this->getExpectedConfig(), $config->toArray());
 
         }
 
         protected function getExpectedConfig()
         {
 
-            return new Config([
+            return [
 
-                'app.version' => '1.0',
-                'app.env'     => 'prod',
-                'package.token' => 'token',
-                'packages.loaded' => ['pre', 'sub'],
-                'package.pre.version' => '0.1b',
-                'add.key' => 'added',
-                'sub.key' => 'test'
-
-            ]);
+                'multiple.version' => '1.0',
+                'multiple.env'     => 'dev',
+                'stack' => ['packageX', 'packageY'],
+                'test' => 'value'
+            ]   ;
 
         }
 
+    }
+
+    class TestScalarDirective extends ScalarDirective
+    {
+        const DIRECTIVE = 'test';
+    }
+
+    class TestStackDirective extends StackDirective
+    {
+        const DIRECTIVE = 'stack';
+    }
+
+    class TestMultipleDirective extends MultipleDirective
+    {
+        const PREFIX = 'multiple';
     }

@@ -36,7 +36,10 @@
                 $importedConfig = $this->import($entry, $config);
                 if($importedConfig)
                 {
-                    $config->merge($importedConfig);
+                    foreach($importedConfig as $directive)
+                    {
+                        $config->import($directive);
+                    }
                 }
             }
 
@@ -47,9 +50,10 @@
          * @param $file
          * @param $config Config Make $config available in imported config file to manipulate it directly
          *
-         * @return Config
+         * @return array
+         * @throws Exception
          */
-        protected function import($file, $config) : Config
+        protected function import($file, $config) : array
         {
             $originalConfig = spl_object_hash($config);
 
@@ -59,11 +63,6 @@
             if(spl_object_hash($config) != $originalConfig)
             {
                 throw new Exception(sprintf('$config has been overwritten while importing "%s" ; please do not assign a value to $config in your config files', $file));
-            }
-
-            if(!$importedConfig instanceof Config)
-            {
-                $importedConfig = Config::factory($importedConfig);
             }
 
             return $importedConfig;

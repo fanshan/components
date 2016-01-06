@@ -6,7 +6,7 @@
     use ObjectivePHP\Config\MultipleDirective;
     use ObjectivePHP\PHPUnit\TestCase;
 
-    class StackDirectiveTest extends TestCase
+    class MultipleDirectiveTest extends TestCase
     {
 
         public function testMultipleDirectiveImport()

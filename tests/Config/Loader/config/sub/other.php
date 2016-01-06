@@ -1,17 +1,7 @@
 <?php
 
-    use ObjectivePHP\Config\Config;
+    use Test\ObjectivePHP\Config\Loader\TestScalarDirective;
 
-    $otherConfig = new Config([
-        'app.env'         => 'prod',
-        'packages.loaded' => 'sub'
-    ]);
-
-    $extra = (new Config());
-
-    $extra->package->pre->fromArray([
-        'version' => '0.1b'
-
-    ]);
-
-    return $otherConfig->merge($extra);
+    return [
+        new TestScalarDirective('value')
+    ];

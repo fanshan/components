@@ -1,11 +1,11 @@
 <?php
 
 
+    use Test\ObjectivePHP\Config\Loader\TestMultipleDirective;
+
     return [
-
-        'app.version' => '1.0',
-        'app.env'     => 'dev'
-
+        new TestMultipleDirective('version', '1.0'),
+        new TestMultipleDirective('env', 'dev')
     ];
 
 
