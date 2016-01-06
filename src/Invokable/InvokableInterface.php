@@ -15,13 +15,15 @@
          * Run the operation
          *
          * @param ApplicationInterface $app
-         * @param mixed ...$args
+         * @param mixed                ...$args
          *
          * @return mixed
          */
         public function __invoke(ApplicationInterface $app);
 
         /**
+         * Return short description
+         *
          * @return string
          */
         public function getDescription() : string;
