@@ -7,7 +7,7 @@
     use ObjectivePHP\PHPUnit\TestCase;
     use ObjectivePHP\Primitives\Merger\MergePolicy;
 
-    class StackedValueDirectiveTest extends TestCase
+    class StackedValuesDirectiveTest extends TestCase
     {
 
         public function testStackedValuesDirectiveImport()
