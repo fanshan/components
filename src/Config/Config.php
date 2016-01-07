@@ -25,6 +25,11 @@
         protected $matcher;
 
         /**
+         * @var array Default internal value
+         */
+        protected $value = [];
+
+        /**
          * Config constructor.
          *
          * @param array $input
