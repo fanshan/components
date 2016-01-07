@@ -33,8 +33,18 @@
             $mergedValue = $merger->merge('a', 'b');
             $appendValue = $merger->merge(Collection::cast(['a', 'b']), 'c');
 
-            $this->assertEquals(Collection::cast(['a', 'b']), $mergedValue);
+            $this->assertEquals(['a', 'b'], $mergedValue);
             $this->assertEquals(Collection::cast(['a', 'b', 'c']), $appendValue);
+        }
+
+        public function testCombiningWithNullValue()
+        {
+            $merger = new ValueMerger(MergePolicy::COMBINE);
+
+            $mergedValue = $merger->merge('a', null);
+            $mergedValue = $merger->merge($mergedValue, false);
+
+            $this->assertEquals(['a', false], $mergedValue);
         }
 
         public function testReplacing()
@@ -43,6 +53,18 @@
 
             $mergedValue = $merger->merge('a', 'b');
 
+            $this->assertEquals('b', $mergedValue);
+        }
+
+        public function testSkipping()
+        {
+            $merger = new ValueMerger(MergePolicy::SKIP);
+
+            $mergedValue = $merger->merge('a', 'b');
+
+            $this->assertEquals('a', $mergedValue);
+
+            $mergedValue = $merger->merge(null, 'b');
             $this->assertEquals('b', $mergedValue);
         }
 
@@ -79,6 +101,26 @@
             $policy = $merger->getPolicy();
 
             $this->assertEquals(MergePolicy::ADD, $policy);
+
+        }
+
+        public function testAutoMerging()
+        {
+            $merger = new ValueMerger();
+
+            $a = 'a';
+            $b = 'b';
+
+            $this->assertEquals('b', $merger->merge($a, $b));
+
+
+            $a = ['x' => 'a'];
+            $b = 'b';
+
+            $this->assertEquals(['x' => 'a', 'b'], $array = $merger->merge($a, $b));
+
+
+
 
         }
 

@@ -1,11 +1,11 @@
 <?php
 
 
-    use Test\ObjectivePHP\Config\Loader\TestMultipleDirective;
+    use Test\ObjectivePHP\Config\Loader\TestSingleValueDirectiveGroup;
 
     return [
-        new TestMultipleDirective('version', '1.0'),
-        new TestMultipleDirective('env', 'dev')
+        new TestSingleValueDirectiveGroup('version', '1.0'),
+        new TestSingleValueDirectiveGroup('env', 'dev')
     ];
 
 

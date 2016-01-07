@@ -10,7 +10,9 @@
     namespace ObjectivePHP\Config;
     
     
-    abstract class ScalarDirective extends AbstractDirective
+    use ObjectivePHP\Primitives\Merger\ValueMerger;
+
+    abstract class SingleValueDirective extends AbstractDirective
     {
         /**
          * Directive configuration identifier (will be used as key in the Config object)
@@ -18,7 +20,7 @@
         const DIRECTIVE = 'THIS HAS TO BE SET IN INHERITED CLASSES';
 
         /**
-         * ScalarDirective constructor.
+         * SingleValueDirective constructor.
          *
          * @param $value
          */
@@ -38,13 +40,9 @@
             $identifier = static::DIRECTIVE;
 
             // only set directive if it is not present or if it can be overridden
-            if ($config->lacks($identifier) || $this->isOverrideAllowed)
-            {
-                $config->set($identifier, $this->getValue());
-            }
+            $config->set($identifier, (new ValueMerger($this->mergePolicy))->merge($config->get($identifier), $this->getValue()));
 
             return $this;
         }
-
 
     }

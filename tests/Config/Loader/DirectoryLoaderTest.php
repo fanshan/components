@@ -5,9 +5,9 @@
 
     use ObjectivePHP\Config\Exception;
     use ObjectivePHP\Config\Loader\DirectoryLoader;
-    use ObjectivePHP\Config\MultipleDirective;
-    use ObjectivePHP\Config\ScalarDirective;
-    use ObjectivePHP\Config\StackDirective;
+    use ObjectivePHP\Config\SingleValueDirectiveGroup;
+    use ObjectivePHP\Config\SingleValueDirective;
+    use ObjectivePHP\Config\StackedValuesDirective;
     use ObjectivePHP\PHPUnit\TestCase;
 
     class DirectoryLoaderTest extends TestCase
@@ -36,28 +36,27 @@
         {
 
             return [
-
                 'multiple.version' => '1.0',
                 'multiple.env'     => 'dev',
                 'stack' => ['packageX', 'packageY'],
                 'test' => 'value'
-            ]   ;
+            ];
 
         }
 
     }
 
-    class TestScalarDirective extends ScalarDirective
+    class TestSingleValueDirective extends SingleValueDirective
     {
         const DIRECTIVE = 'test';
     }
 
-    class TestStackDirective extends StackDirective
+    class TestStackedValuesDirective extends StackedValuesDirective
     {
         const DIRECTIVE = 'stack';
     }
 
-    class TestMultipleDirective extends MultipleDirective
+    class TestSingleValueDirectiveGroup extends SingleValueDirectiveGroup
     {
         const PREFIX = 'multiple';
     }

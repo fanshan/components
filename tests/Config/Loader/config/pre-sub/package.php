@@ -1,8 +1,8 @@
 <?php
 
-    use Test\ObjectivePHP\Config\Loader\TestStackDirective;
+    use Test\ObjectivePHP\Config\Loader\TestStackedValuesDirective;
 
     return [
-        new TestStackDirective('packageX'),
-        new TestStackDirective('packageY'),
+        new TestStackedValuesDirective('packageX'),
+        new TestStackedValuesDirective('packageY'),
     ];

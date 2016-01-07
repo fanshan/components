@@ -1,7 +1,7 @@
 <?php
 
-    use Test\ObjectivePHP\Config\Loader\TestScalarDirective;
+    use Test\ObjectivePHP\Config\Loader\TestSingleValueDirective;
 
     return [
-        new TestScalarDirective('value')
+        new TestSingleValueDirective('value')
     ];

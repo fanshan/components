@@ -10,17 +10,17 @@
     namespace ObjectivePHP\Config;
     
     
-    abstract class StackDirective extends AbstractDirective
+    abstract class StackedValuesDirective extends AbstractDirective
     {
         const DIRECTIVE = 'THIS HAS TO BE SET IN INHERITED CLASSES';
 
         /**
          * @var bool
          */
-        protected $isOverrideAllowed = false;
+        protected $mergePolicy = false;
 
         /**
-         * ScalarDirective constructor.
+         * SingleValueDirective constructor.
          *
          * @param $value
          */
@@ -39,7 +39,7 @@
         {
             $identifier = static::DIRECTIVE;
 
-            $currentValue = $this->isOverrideAllowed ? [] : $config->get($identifier, []);
+            $currentValue = $this->mergePolicy ? [] : $config->get($identifier, []);
 
             $currentValue[] = $this->value;
 

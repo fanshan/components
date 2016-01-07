@@ -10,6 +10,8 @@
     namespace ObjectivePHP\Config;
     
     
+    use ObjectivePHP\Primitives\Merger\MergePolicy;
+
     abstract class AbstractDirective implements DirectiveInterface
     {
 
@@ -24,27 +26,18 @@
         protected $value;
 
         /**
-         * @var bool
+         * @var bool Tells how the mergeInto method should behave in case a identical directive has already been set
          */
-        protected $isOverrideAllowed = true;
-
+        protected $mergePolicy = MergePolicy::AUTO;
 
         /**
+         * @param $mergePolicy
+         *
          * @return $this
          */
-        public function denyOverride()
+        public function setMergePolicy($mergePolicy)
         {
-            $this->isOverrideAllowed = false;
-
-            return $this;
-        }
-
-        /**
-         * @return $this
-         */
-        public function allowOverride()
-        {
-            $this->isOverrideAllowed = true;
+            $this->mergePolicy = $mergePolicy;
 
             return $this;
         }

@@ -65,9 +65,8 @@
         protected $mergers    = [];
 
         /**
-         * @param array  $input
-         * @param int    $flags
-         * @param string $iterator_class
+         * @param array $input
+         *
          */
         public function __construct($input = [])
         {
