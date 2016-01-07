@@ -10,7 +10,7 @@
     class StackedValueDirectiveTest extends TestCase
     {
 
-        public function testStackedValueDirectiveImport()
+        public function testStackedValuesDirectiveImport()
         {
             $config = new Config();
 
