@@ -36,10 +36,10 @@
         {
 
             return [
-                'multiple.version' => '1.0',
-                'multiple.env'     => 'dev',
-                'stack' => ['packageX', 'packageY'],
-                'test' => 'value'
+                TestSingleValueDirectiveGroup::class . '.version' => '1.0',
+                TestSingleValueDirectiveGroup::class . '.env'     => 'dev',
+                TestStackedValuesDirective::class => ['packageX', 'packageY'],
+                TestSingleValueDirective::class => 'value'
             ];
 
         }
@@ -48,15 +48,12 @@
 
     class TestSingleValueDirective extends SingleValueDirective
     {
-        const DIRECTIVE = 'test';
     }
 
     class TestStackedValuesDirective extends StackedValuesDirective
     {
-        const DIRECTIVE = 'stack';
     }
 
     class TestSingleValueDirectiveGroup extends SingleValueDirectiveGroup
     {
-        const PREFIX = 'multiple';
     }
