@@ -12,7 +12,6 @@
     
     abstract class StackedValuesDirective extends AbstractDirective
     {
-        const DIRECTIVE = 'THIS HAS TO BE SET IN INHERITED CLASSES';
 
         /**
          * @var bool
@@ -37,7 +36,7 @@
          */
         public function mergeInto(ConfigInterface $config) : DirectiveInterface
         {
-            $identifier = static::DIRECTIVE;
+            $identifier = static::class;
 
             $currentValue = $this->mergePolicy ? [] : $config->get($identifier, []);
 

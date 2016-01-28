@@ -20,7 +20,7 @@
 
             $this->assertCount(1, $config);
             $this->assertTrue($config->has('test.directive.first'));
-            $this->assertEquals('test value', $config->get(TestSingleValueDirectiveGroup::PREFIX . '.first'));
+            $this->assertEquals('test value', $config->get(TestSingleValueDirectiveGroup::class . '.first'));
 
             $config->import(new TestSingleValueDirectiveGroup('second', 'other value'));
 
@@ -60,7 +60,7 @@
             $this->assertEquals('overwriting value', $config->get('test.directive.second'));
 
             // check that a Multiple Directive full content can be retrieved as subset
-            $this->assertEquals(['first' => 'other value', 'second' => 'overwriting value'], $config->subset(TestSingleValueDirectiveGroup::PREFIX)
+            $this->assertEquals(['first' => 'other value', 'second' => 'overwriting value'], $config->subset(TestSingleValueDirectiveGroup::class)
                                                                                                    ->toArray());
 
             // test default merging behaviour for array values

@@ -15,11 +15,6 @@
     abstract class SingleValueDirectiveGroup extends AbstractDirective
     {
         /**
-         * Directive configuration prefix (will be used as key in the Config object)
-         */
-        const PREFIX = 'THIS HAS TO BE SET IN INHERITED CLASSES';
-
-        /**
          * @var string Identifier prefix
          */
         protected $prefix;
@@ -49,7 +44,7 @@
          */
         public function mergeInto(ConfigInterface $config) : DirectiveInterface
         {
-            $identifier = sprintf('%s.%s', static::PREFIX, $this->identifier);
+            $identifier = sprintf('%s.%s', static::class, $this->identifier);
 
             // only set directive if it is not present
             if ($config->lacks($identifier))

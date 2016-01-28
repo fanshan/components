@@ -17,6 +17,12 @@
         {
             $config = new Config();
 
+            return $this->loadInto($config, $location);
+
+        }
+
+        public function loadInto(Config $config, $location) : Config
+        {
             // prepare data for further treatment
             $location = realpath($location);
 

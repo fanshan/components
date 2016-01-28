@@ -15,11 +15,6 @@
     abstract class SingleValueDirective extends AbstractDirective
     {
         /**
-         * Directive configuration identifier (will be used as key in the Config object)
-         */
-        const DIRECTIVE = 'THIS HAS TO BE SET IN INHERITED CLASSES';
-
-        /**
          * SingleValueDirective constructor.
          *
          * @param $value
@@ -37,7 +32,7 @@
          */
         public function mergeInto(ConfigInterface $config) : DirectiveInterface
         {
-            $identifier = static::DIRECTIVE;
+            $identifier = static::class;
 
             // only set directive if it is not present or if it can be overridden
             $config->set($identifier, (new ValueMerger($this->mergePolicy))->merge($config->get($identifier), $this->getValue()));
