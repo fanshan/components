@@ -15,7 +15,7 @@
       "role": "lead"
     },
     {
-      "name": "Jérôme 'Neofox' Schaeffer" ,
+      "name": "Jérôme 'Neofox' Schaeffer",
       "email": "jerome@objective-php.org",
       "role": "dev"
     }
@@ -24,13 +24,17 @@
     "php": ">=7.0"
   },
   "replace": {
-      "objective-php/primitives": "*",
-      "objective-php/matcher": "*",
-      "objective-php/phpunit-extension": "*",
-      "objective-php/config": "*"
+    "objective-php/primitives": "*",
+    "objective-php/matcher": "*",
+    "objective-php/phpunit-extension": "*",
+    "objective-php/config": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.*"
+    "phpunit/phpunit": "5.*",
+    "objective-php/services-factory": "dev-master",
+    "objective-php/events-handler": "dev-master",
+    "objective-php/message": "dev-master",
+    "objective-php/application": "dev-master"
   },
   "autoload": {
     "psr-4": {
