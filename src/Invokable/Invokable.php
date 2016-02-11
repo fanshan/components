@@ -2,8 +2,6 @@
 
     namespace ObjectivePHP\Invokable;
     
-    
-    use ObjectivePHP\Application\ApplicationInterface;
     use ObjectivePHP\ServicesFactory\Exception\Exception as ServicesFactoryException;
     use ObjectivePHP\ServicesFactory\ServiceReference;
     use ObjectivePHP\ServicesFactory\ServicesFactory;
