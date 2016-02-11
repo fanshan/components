@@ -2,7 +2,8 @@
 
     namespace ObjectivePHP\Invokable;
 
-    use ObjectivePHP\Application\ApplicationInterface;
+    use ObjectivePHP\ServicesFactory\ServicesFactory;
+
 
     /**
      * Interface InvokableInterface
@@ -14,12 +15,11 @@
         /**
          * Run the operation
          *
-         * @param ApplicationInterface $app
          * @param mixed                ...$args
          *
          * @return mixed
          */
-        public function __invoke(ApplicationInterface $app);
+        public function __invoke(...$args);
 
         /**
          * Return short description
@@ -27,5 +27,12 @@
          * @return string
          */
         public function getDescription() : string;
+
+        /**
+         * @param ServicesFactory $factory
+         *
+         * @return mixed
+         */
+        public function setServicesFactory(ServicesFactory $factory);
 
     }

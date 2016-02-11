@@ -4,7 +4,9 @@
     
     
     use ObjectivePHP\Application\ApplicationInterface;
+    use ObjectivePHP\ServicesFactory\Exception\Exception as ServicesFactoryException;
     use ObjectivePHP\ServicesFactory\ServiceReference;
+    use ObjectivePHP\ServicesFactory\ServicesFactory;
 
     /**
      * Class Invokable
@@ -29,6 +31,11 @@
         protected $operation;
 
         /**
+         * @var ServicesFactory
+         */
+        protected $servicesFactory;
+
+        /**
          * Invokable constructor.
          *
          * @param $operation
@@ -39,50 +46,29 @@
         }
 
         /**
-         * Run the operation
+         * Returns an Invokable operation
          *
-         * @param ApplicationInterface $app
+         * @param $invokable
          *
-         * @return mixed
+         * @return static
          */
-        public function run(ApplicationInterface $app)
+        public static function cast($invokable)
         {
-
-            $callable = $this->getCallable($app);
-
-            return $callable($app);
+            return ($invokable instanceof InvokableInterface) ? $invokable : new static($invokable);
         }
 
         /**
-         * @param ApplicationInterface $app
-         * @return callable
+         * Proxy to run() method
          *
-         * @throws Exception
-         * @throws \ObjectivePHP\ServicesFactory\Exception\ServiceNotFoundException
+         * @param array $args
+         *
+         * @return mixed
+         * @internal param ApplicationInterface $app
+         *
          */
-        public function getCallable(ApplicationInterface $app)
+        public function __invoke(...$args)
         {
-            $operation = $this->operation;
-
-            if (!is_callable($operation))
-            {
-                if ($operation instanceof ServiceReference)
-                {
-                    $operation = $app->getServicesFactory()->get($operation);
-                }
-                elseif (class_exists($operation))
-                {
-                    $operation = new $operation;
-                }
-            }
-
-
-            if (!is_callable($operation))
-            {
-                throw new Exception(sprintf('Cannot run operation: %s', $this->getDescription()));
-            }
-
-            return $operation;
+            return $this->run(...$args);
         }
 
         /**
@@ -96,12 +82,11 @@
             switch (true)
             {
                 case $operation instanceof ServiceReference:
-                    $description = 'Service "' . $operation->getId() . '"';
+                    $description = 'Referenced service "' . $operation->getId() . '"';
                     break;
 
                 case $operation instanceof \Closure:
-                    $reflected = new \ReflectionFunction($operation);
-
+                    $reflected   = new \ReflectionFunction($operation);
                     $description = sprintf('Closure defined in file "%s" on line %d', $reflected->getFileName(), $reflected->getStartLine());
                     break;
 
@@ -122,27 +107,103 @@
         }
 
         /**
-         * Returns an Invokable operation
+         * Run the operation
          *
-         * @param $invokable
+         * @param array $args
          *
-         * @return static
+         * @return mixed
+         * @throws Exception
+         * @internal param ApplicationInterface $app
+         *
          */
-        public static function cast($invokable)
+        public function run(...$args)
         {
-            return ($invokable instanceof InvokableInterface) ? $invokable : new static($invokable);
+            $callable = $this->getCallable();
+
+            return $callable(...$args);
         }
 
         /**
-         * Proxy to run() method
+         * @return callable
          *
-         * @param ApplicationInterface $app
-         *
-         * @return mixed
+         * @throws Exception
+         * @throws \ObjectivePHP\ServicesFactory\Exception\ServiceNotFoundException
          */
-        public function __invoke(ApplicationInterface $app)
+        public function getCallable()
         {
-            return $this->run($app);
+            $operation = $this->operation;
+            try
+            {
+                if (!is_callable($operation))
+                {
+                    if ($operation instanceof ServiceReference)
+                    {
+                        $serviceId = $operation->getId();
+
+                        if (is_null($this->servicesFactory))
+                        {
+                            throw new Exception(sprintf('No ServicesFactory is available to build referenced service "%s"', $serviceId));
+                        }
+
+                        if (!$this->servicesFactory->has($operation))
+                        {
+                            throw new Exception(sprintf('Referenced service "%s" is not registered', $serviceId), Exception::REFERENCED_SERVICE_IS_NOT_REGISTERED);
+                        }
+
+                        try
+                        {
+                            $operation = $this->getServicesFactory()->get($operation);
+                        } catch (ServicesFactoryException $e)
+                        {
+                            throw new Exception(sprintf('An error occurred when building referenced service "%s"', $serviceId), Exception::REFERENCED_SERVICE_BUILD_ERROR, $e);
+                        }
+
+                        if (!is_callable($operation))
+                        {
+                            throw new Exception(sprintf('Referenced service "%s" is not an instance of a callable class ("%s" should implement __invoke())', $serviceId, get_class($operation)), Exception::REFERENCED_SERVICE_IS_NOT_CALLABLE);
+                        }
+                    }
+                    elseif (class_exists($operation))
+                    {
+                        $operation = new $operation;
+
+                        if (!is_callable($operation))
+                        {
+                            throw new Exception(sprintf('Class "%s" is not callable (it should implement __invoke())', get_class($operation)), Exception::CLASS_IS_NOT_INVOKABLE);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception(sprintf('Class "%s" does not exist', $operation), Exception::CLASS_DOES_NO_EXIST);
+                    }
+                }
+
+            } catch (Exception $e)
+            {
+                throw new Exception(sprintf('Cannot run operation: %s', $this->getDescription()), Exception::FAILED_RUNNING_OPERATION, $e);
+            }
+
+            return $operation;
+        }
+
+        /**
+         * @return ServicesFactory
+         */
+        public function getServicesFactory()
+        {
+            return $this->servicesFactory;
+        }
+
+        /**
+         * @param ServicesFactory $servicesFactory
+         *
+         * @return $this
+         */
+        public function setServicesFactory(ServicesFactory $servicesFactory)
+        {
+            $this->servicesFactory = $servicesFactory;
+
+            return $this;
         }
 
     }
