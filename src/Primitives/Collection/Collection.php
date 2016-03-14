@@ -1120,5 +1120,12 @@
             return count($this->value);
         }
 
+        /**
+         * Reverse values
+         */
+        public function reverse() {
+            $this->setInternalValue(array_reverse($this->getInternalValue(), true));
+            return $this;
+        }
     }
 
