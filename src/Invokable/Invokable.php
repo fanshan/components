@@ -32,7 +32,6 @@ class Invokable extends AbstractInvokable
         $this->operation = $operation;
     }
 
-
     /**
      * Returns an Invokable operation
      *
@@ -47,7 +46,6 @@ class Invokable extends AbstractInvokable
 
     /**
      * Run the operation
-     *
      * @param array $args
      *
      * @return mixed
