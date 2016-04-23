@@ -10,6 +10,7 @@
     namespace Tests\Invokable;
     
     
+    use ObjectivePHP\Application\ApplicationInterface;
     use ObjectivePHP\Invokable\Exception;
     use ObjectivePHP\Invokable\Invokable;
     use ObjectivePHP\PHPUnit\TestCase;
@@ -106,8 +107,11 @@
             $servicesFactory->expects($this->once())->method('has')->with('service.id')->willReturn(true);
             $servicesFactory->expects($this->once())->method('get')->with('service.id')->willReturn($service);
 
+            $application = $this->getMock(ApplicationInterface::class);
+            $application->method('getServicesFactory')->willReturn($servicesFactory);
+
             $invokable = new Invokable(new ServiceReference('service.id'));
-            $invokable->setServicesFactory($servicesFactory);
+            $invokable->setApplication($application);
 
             $this->assertSame($service, $invokable->getCallable());
         }
@@ -117,8 +121,12 @@
             $servicesFactory = $this->getMock(ServicesFactory::class);
             $servicesFactory->expects($this->once())->method('has')->with('service.id')->willReturn(false);
 
+            $application = $this->getMock(ApplicationInterface::class);
+            $application->method('getServicesFactory')->willReturn($servicesFactory);
+
             $invokable = new Invokable(new ServiceReference('service.id'));
-            $invokable->setServicesFactory($servicesFactory);
+            $invokable->setApplication($application);
+
 
             try
             {
@@ -146,8 +154,11 @@
             $servicesFactory->expects($this->once())->method('has')->with('service.id')->willReturn(true);
             $servicesFactory->expects($this->once())->method('get')->with('service.id')->willReturn($service);
 
+            $application = $this->getMock(ApplicationInterface::class);
+            $application->method('getServicesFactory')->willReturn($servicesFactory);
+
             $invokable = new Invokable(new ServiceReference('service.id'));
-            $invokable->setServicesFactory($servicesFactory);
+            $invokable->setApplication($application);
 
             try
             {

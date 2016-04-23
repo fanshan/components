@@ -59,6 +59,8 @@ class AbstractInvokable implements InvokableInterface
         return $this->application->getServicesFactory();
     }
 
+    
+    
     public function getDescription() : string
     {
         return 'Instance of Invokable class ' . get_class($this);
