@@ -25,6 +25,8 @@
     "objective-php/matcher": "1.*",
     "objective-php/phpunit-extension": "1.*",
     "objective-php/config": "1.*",
-    "objective-php/notification": "1.*"
+    "objective-php/notification": "1.*",
+    "objective-php/invokable": "1.*",
+    "objective-php/data-processor": "1.*"
   }
 }
