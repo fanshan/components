@@ -26,7 +26,7 @@
     "objective-php/phpunit-extension": "~1.0",
     "objective-php/config": "~1.0",
     "objective-php/notification": "~1.0",
-    "objective-php/invokable": "~1.0",
+    "objective-php/invokable": "~1.1",
     "objective-php/data-processor": "~1.0"
   }
 }
